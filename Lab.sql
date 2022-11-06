@@ -1,27 +1,39 @@
-SELECT * FROM authors;
-
-CREATE TABLE author_title
-AS 
-(SELECT au_id, au_lname, au_fname, title_id FROM authors
+SELECT au_id AS "ID", 
+au_lname AS "Name", 
+au_fname AS "Last Name",
+title AS "Title",
+pub_name AS "Publisher Name"
+FROM authors
 LEFT JOIN titleauthor
-USING (au_id));
+USING(au_id)
+LEFT JOIN titles
+USING(title_id)
+LEFT JOIN publishers
+USING(pub_id);
 
-SELECT * FROM author_title
-
-CREATE TABLE publisher_id
-AS 
-(SELECT title, pub_id, title_id,pub_name FROM title
+SELECT au_id AS "ID", 
+au_lname AS "Name", 
+au_fname AS "Last Name",
+title AS "Title",
+pub_name AS "Publisher Name",
+COUNT(*)
+FROM authors
 LEFT JOIN titleauthor
-USING (pub_id));
+USING(au_id)
+LEFT JOIN titles
+USING(title_id)
+LEFT JOIN publishers
+USING(pub_id)
+GROUP BY au_lname
+ORDER BY COUNT(pub_name);
 
-SELECT a.au_id AS 'AUTHOR ID', 
-a.au_lname AS 'LAST NAME', 
-a.au_fname AS 'FIRST NAME',
-SUM(s.qty) AS 'TOTAL'
-FROM authors a
-LEFT JOIN titleauthor ta
-ON  a.au_id = ta.au_id
-LEFT JOIN sales s
-ON s.title_id = ta.title_id
-GROUP BY a.au_id
-ORDER BY TOTAL DESC;
+SELECT au_id AS "ID", 
+au_lname AS "Name", 
+au_fname AS "Last Name",
+qty AS "Quantity"
+FROM authors
+JOIN titleauthor
+USING(au_id)
+JOIN sales
+USING (title_id)
+GROUP BY au_id;
