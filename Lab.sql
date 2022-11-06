@@ -30,10 +30,22 @@ ORDER BY COUNT(pub_name);
 SELECT au_id AS "ID", 
 au_lname AS "Name", 
 au_fname AS "Last Name",
-qty AS "Quantity"
+SUM(qty) AS "Quantity"
 FROM authors
 JOIN titleauthor
 USING(au_id)
 JOIN sales
 USING (title_id)
 GROUP BY au_id;
+
+SELECT au_id AS "ID", 
+au_lname AS "Name", 
+au_fname AS "Last Name",
+SUM(qty) AS "Quantity"
+FROM authors
+JOIN titleauthor
+USING(au_id)
+JOIN sales
+USING (title_id)
+GROUP BY au_id
+ORDER BY Quantity;
